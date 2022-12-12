@@ -12,7 +12,8 @@ app.use(bodyParser.json());
 app.use(express.static('server/public'));
 
 //router information is going to go here - I"m going to have a taskRouter
-
+let tasksRouter = require('./routes/tasks.router')
+app.use('/tasks', tasksRouter);
 
 // Start express
 const PORT = 5001;

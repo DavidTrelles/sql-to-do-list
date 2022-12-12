@@ -20,10 +20,12 @@ function getTasks() {
     }
   });
 }
+
+//gets data from inputs and sends it to server
 function postTask() {
   let newTask = {
-    artist: $("#item").val(),
-    track: $("#urgency").val(),
+    task: $("#item").val(),
+    urgency: $("#urgency").val(),
     isCompleted: "false",
   };
   $.ajax({
@@ -31,7 +33,7 @@ function postTask() {
     url: "/tasks",
     data: newTask,
   }).then(function (response) {
-    $("#task").val("");
+    $("#item").val("");
     $("#urgency").val("");
     getTasks();
   });
