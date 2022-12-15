@@ -17,7 +17,7 @@ function getTasks() {
     // append data to the DOM
     for (let item of response) {
       $("#output").append(`
-               <li> Item: ${item.task} Urgency ${item.urgency} <button class="completed">Task Completed</button><button class="delete">Delete item</button></li> 
+               <li> Item: ${item.task} priority ${item.priority} <button class="completed">Task Completed</button><button class="delete">Delete item</button></li> 
             `);
     }
   });
@@ -27,7 +27,7 @@ function getTasks() {
 function postTask() {
   let newTask = {
     task: $("#item").val(),
-    urgency: $("#urgency").val(),
+    priority: $("#priority").val(),
     isCompleted: "false", //this is probably wrong and needs to be fixed
   };
   $.ajax({
@@ -36,7 +36,7 @@ function postTask() {
     data: newTask,
   }).then(function (response) {
     $("#item").val("");
-    $("#urgency").val("");
+    $("#priority").val("");
     getTasks();
   });
 }
