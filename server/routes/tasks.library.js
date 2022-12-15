@@ -15,27 +15,12 @@ router.get("/", (req, res) => {
     });
 });
 
-router.post("/", (req, res) => {
-  const newTask = req.body;
-  const queryText = `INSERT INTO "tasks" ("task", "priority", "isCompleted")
-    VALUES ('${newTask.item}', '${newTask.priority}', '${newTask.isCompleted}');
-    `;
-  pool
-    .query(queryText)
-    .then((result) => {
-      console.log("result from DB", result);
-      res.sendStatus(201);
-    })
-    .catch((error) => {
-      console.log("error making insert query", error);
-      res.sendStatus(500);
-    });
-});
-module.exports = router;
+
+
 
 router.delete("/:id", (req, res) => {
   console.log("hello from delete request!", req.params.id);
-  const queryText = `DELETE from songs WHERE id = ${req.params.id};`;
+  const queryText = `DELETE from tasks WHERE id = ${req.params.id};`;
   pool
     .query(queryText)
     .then((result) => {
@@ -48,13 +33,13 @@ router.delete("/:id", (req, res) => {
 });
 router.post("/", (req, res) => {
   const newtask = req.body;
-  const queryText = `INSERT INTO "tasks" ("task", "priority", "is_checked",)
-      VALUES ($1, $2, $3);
+  const queryText = `INSERT INTO "tasks" (task, priority, is_completed)
+      VALUES ('${newtask.task}', ${newtask.priority}, '${newtask.is_completed}');
       `;
   //This process is called paramaterized query or sanitization, and it works for *some reason*
   //${newtask.rank}', '${newtask.artist}', '${newtask.track}', '${newtask.published}
   pool
-    .query(queryText, [newtask.task, newtask.priority, newtask.is_checked])
+    .query(queryText)
     .then((result) => {
       console.log("result from DB", result);
       res.sendStatus(201);
@@ -64,3 +49,6 @@ router.post("/", (req, res) => {
       res.sendStatus(500);
     });
 });
+
+
+module.exports = router;

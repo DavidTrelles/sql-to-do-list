@@ -11,13 +11,13 @@ function getTasks() {
   $("#output").empty();
   $.ajax({
     type: "GET",
-    url: "/tasks",
+    url: "/tasks.library",
   }).then(function (response) {
-    console.log("GET /tasks response", response);
+    console.log("GET /tasks.library response", response);
     // append data to the DOM
     for (let item of response) {
       $("#output").append(`
-               <li> Item: ${item.task} priority ${item.priority} <button class="completed">Task Completed</button><button class="delete">Delete item</button></li> 
+               <li data-id=${item.id}> Item: ${item.task}, Priority: ${item.priority} <button class="completed">Task Completed</button><button class="delete">Delete item</button></li> 
             `);
     }
   });
@@ -28,11 +28,11 @@ function postTask() {
   let newTask = {
     task: $("#item").val(),
     priority: $("#priority").val(),
-    isCompleted: "false", //this is probably wrong and needs to be fixed
+    is_completed: "false", //this is probably wrong and needs to be fixed
   };
   $.ajax({
     type: "POST",
-    url: "/tasks",
+    url: "/tasks.library",
     data: newTask,
   }).then(function (response) {
     $("#item").val("");
@@ -42,6 +42,17 @@ function postTask() {
 }
 function deleteThis() {
     $(this).parent().remove();
+    const id = $(this).parent().data("id");
+    $.ajax({
+      type: "DELETE",
+      url:`/tasks.library/${id}`,
+    })
+    .then(function() {
+      getTasks();
+    })
+    .catch(function (error) {
+      console.log('error with deleting,', error);
+    })
     //needs to make a delete request
   }
 function taskCompleted(){

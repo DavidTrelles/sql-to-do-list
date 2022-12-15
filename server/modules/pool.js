@@ -16,3 +16,5 @@ pool.on("connect", () => {
 pool.on("error", (error) => {
   console.log("pg error", error);
 });
+
+module.exports = pool
