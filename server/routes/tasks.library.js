@@ -3,7 +3,7 @@ const router = express.Router();
 const pool = require("../modules/pool");
 
 router.get("/", (req, res) => {
-  let queryText = 'SELECT * from "tasks";';
+  let queryText = 'SELECT * from "tasks" ORDER by "id" ASC;';
   pool
     .query(queryText)
     .then((result) => {
@@ -14,9 +14,6 @@ router.get("/", (req, res) => {
       console.log("error making a query", error);
     });
 });
-
-
-
 
 router.delete("/:id", (req, res) => {
   console.log("hello from delete request!", req.params.id);
@@ -50,5 +47,20 @@ router.post("/", (req, res) => {
     });
 });
 
+router.put("/is_completed/:id", (req, res) => {
+console.log('is_completed id', req.params.id);
+console.log('is_completed body', req.body)
+  let queryText = `UPDATE "tasks" SET "is_completed" = 'true' WHERE "id"=${req.params.id};`;
+  pool
+    .query(queryText)
+    .then((dbResponse) => {
+      console.log("dbresponse", dbResponse);
+      res.sendStatus(200);
+    })
+    .catch((error) => {
+      console.log(error);
+      res.sendStatus(500);
+    });
+});
 
 module.exports = router;

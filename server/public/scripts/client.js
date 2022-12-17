@@ -17,7 +17,7 @@ function getTasks() {
     // append data to the DOM
     for (let item of response) {
       $("#output").append(`
-               <li data-id=${item.id}> Item: ${item.task}, Priority: ${item.priority} <button class="completed">Task Completed</button><button class="delete">Delete item</button></li> 
+               <li class=${item.is_completed} data-id=${item.id}> Item: ${item.task}, Priority: ${item.priority} <button class="completed">Task Completed</button><button class="delete">Delete item</button></li> 
             `);
     }
   });
@@ -53,9 +53,21 @@ function deleteThis() {
     .catch(function (error) {
       console.log('error with deleting,', error);
     })
-    //needs to make a delete request
+    //makes a delete request
   }
 function taskCompleted(){
     $(this).parent().addClass('done')
-    //needs to send update request and change css
+    const id = $(this).parent().data("id");
+    $.ajax({
+      type: "PUT",
+      url:`/tasks.library/is_completed/${id}`,
+      data: {is_completed: "true"}
+    })
+    .then(function() {
+      getTasks();
+    })
+    .catch(function (error) {
+      console.log('error with putting,', error);
+    })
+    //sends put request and changes css
 }
