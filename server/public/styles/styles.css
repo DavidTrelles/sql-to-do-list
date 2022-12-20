@@ -1,3 +1,12 @@
 .true{
     background-color: green;
 }
+.item, .priority { font-weight: bold;
+
+}
+h1{
+    text-align: center;
+}
+body{
+    background-color: aqua;
+}

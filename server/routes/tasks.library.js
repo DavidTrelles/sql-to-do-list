@@ -30,26 +30,30 @@ router.delete("/:id", (req, res) => {
 });
 router.post("/", (req, res) => {
   const newtask = req.body;
-  const queryText = `INSERT INTO "tasks" (task, priority, is_completed)
-      VALUES ('${newtask.task}', ${newtask.priority}, '${newtask.is_completed}');
+  if (newtask.task && newtask.priority) {
+    const queryText = `INSERT INTO "tasks" (task, priority, is_completed)
+      VALUES ($1, $2, $3);
       `;
-  //This process is called paramaterized query or sanitization, and it works for *some reason*
-  //${newtask.rank}', '${newtask.artist}', '${newtask.track}', '${newtask.published}
-  pool
-    .query(queryText)
-    .then((result) => {
-      console.log("result from DB", result);
-      res.sendStatus(201);
-    })
-    .catch((error) => {
-      console.log("error making insert query", error);
-      res.sendStatus(500);
-    });
+    //This process is called paramaterized query or sanitization, and it works for *some reason*
+    //${newtask.rank}', '${newtask.artist}', '${newtask.track}', '${newtask.published}
+    pool
+      .query(queryText, [newtask.task, newtask.priority, newtask.is_completed,])
+      .then((result) => {
+        console.log("result from DB", result);
+        res.sendStatus(201);
+      })
+      .catch((error) => {
+        console.log("error making insert query", error);
+        res.sendStatus(500);
+      });
+  } else {
+    console.log("server error")
+  }
 });
 
 router.put("/is_completed/:id", (req, res) => {
-console.log('is_completed id', req.params.id);
-console.log('is_completed body', req.body)
+  console.log("is_completed id", req.params.id);
+  console.log("is_completed body", req.body);
   let queryText = `UPDATE "tasks" SET "is_completed" = 'true' WHERE "id"=${req.params.id};`;
   pool
     .query(queryText)
